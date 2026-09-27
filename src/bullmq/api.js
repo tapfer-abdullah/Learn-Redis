@@ -36,4 +36,62 @@ router.post("/welcome-email", async (req, res) => {
   }
 });
 
+
+// handle failed jobs after all retries have been exhausted. You can listen for the 'failed' event on the queue to handle such cases.
+
+router.get("/failed-jobs", async (req, res) => {
+  const { page = 1, limit = 10 } = req.query;
+  try {
+    const jobs = await emailQueue.getFailed((page - 1) * limit, page * limit - 1); // Fetch failed jobs with pagination
+
+    res.json({
+      jobs: jobs.map(job => ({
+        id: job.id,
+        name: job.name,
+        data: job.data,
+        attemptsMade: job.attemptsMade,
+        failedReason: job.failedReason,
+        timestamp: job.timestamp,
+      }))
+    });
+
+  } catch (error) {
+    console.error("Error fetching failed jobs:", error);
+    res.status(500).json({ error: "Failed to fetch failed jobs" });
+  }
+});
+
+// execute failed jobs after all retries have been exhausted. You can listen for the 'failed' event on the queue to handle such cases.
+router.post("/retry-failed-job/:jobId", async (req, res) => {
+  try {
+    const job = await emailQueue.getJob(req.params.jobId);
+
+    if (!job) {
+      return res.status(404).json({
+        error: "Job not found"
+      });
+    }
+
+    if (!(await job.isFailed())) {
+      return res.status(400).json({
+        error: "Job is not failed" 
+      });
+    }
+
+    await job.retry(); // it means that the job will be retried and will be moved back to the waiting state in the queue, allowing it to be processed again by a worker. The job will retain its original data and settings, including any attempts and backoff strategies that were defined when it was first added to the queue.
+
+    res.json({
+      message: "Job queued for retry",
+      jobId: job.id
+    });
+
+  } catch (error) {
+    console.error(error);
+
+    res.status(500).json({
+      error: "Failed to retry job"
+    });
+  }
+});
+
 export default router;
