@@ -1,0 +1,18 @@
+{
+  "name": "redis",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "nodemon -L --watch src --ext js,json src/index.js",
+    "start": "node src/index.js",
+    "workers": "node src/workers.js",
+    "subscriber": "node src/subscriber.js"
+  },
+  "dependencies": {
+    "bullmq": "^6.3.9",
+    "express": "^5.2.1",
+    "ioredis": "^6.0.0",
+    "mongoose": "^9.10.2",
+    "nodemon": "^3.1.14"
+  }
+}

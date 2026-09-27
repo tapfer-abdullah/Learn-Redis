@@ -1,0 +1,114 @@
+
+
+
+GET http://localhost:5000/api/redis/banner
+
+###
+POST http://localhost:5000/api/redis/banner
+content-type: application/json
+
+{
+  "bannerData": {
+    "title": "Welcome to Our Website",
+    "message": "Enjoy your stay and explore our features!"
+  }
+}
+
+###
+GET http://localhost:5000/api/redis/banner
+
+###
+DELETE http://localhost:5000/api/redis/banner
+
+### 
+GET http://localhost:5000/api/redis/banner/exists
+
+### 
+GET http://localhost:5000/api/redis/banner/ttl
+
+###
+POST http://localhost:5000/api/redis/banner/hash
+content-type: application/json
+
+{
+  "key": "banner-hash",
+  "value": {
+    "age": 30,
+    "title": "Welcome to Our Website",
+    "message": "Enjoy your stay and explore our features!"
+  }
+}
+
+
+###
+GET http://localhost:5000/api/redis/banner/hash/banner-hash
+
+###
+PUT http://localhost:5000/api/redis/banner/hash/update-title/banner-hash
+content-type: application/json
+
+{
+  "title": "Updated Title fds"
+}
+
+###
+#### otp -------------------------------->
+POST http://localhost:5000/api/redis/otp
+content-type: application/json
+
+{
+  "phoneNumber": "+1234567890"
+}
+
+####
+GET http://localhost:5000/api/redis/otp/ttl/%2B1234567890
+
+####
+POST http://localhost:5000/api/redis/otp/verify
+content-type: application/json
+
+{
+  "phoneNumber": "+1234567890",
+  "otp": "771343"
+}
+
+
+### -----------------------------------------------
+### -------------- Queue ----------------------
+### -----------------------------------------------
+POST http://localhost:5000/api/redis/queue/send-email
+content-type: application/json
+
+{
+  "to": "user@example.com",
+  "subject": "Test Email",
+  "body": "This is a test email."
+}
+
+### 
+GET http://localhost:5000/api/redis/queue/send-process
+
+
+### +++++++++++++++++++++++++++++++++++++++++++++++++
+### -------------- BullMQ ---------------------------
+### +++++++++++++++++++++++++++++++++++++++++++++++++
+POST http://localhost:5000/api/redis/bullmq/welcome-email
+content-type: application/json
+
+{
+  "to": "user@example.com",
+  "subject": "Welcome to Our Website",
+  "body": "Enjoy your stay and explore our features!"
+}
+
+
+### +++++++++++++++++++++++++++++++++++++++++++++++++
+### -------------- PUB SUB ---------------------------
+### +++++++++++++++++++++++++++++++++++++++++++++++++
+POST http://localhost:5000/api/redis/pubsub/notifications
+content-type: application/json
+
+{
+  "title": "New Notification",
+  "message": "You have a new notification!"
+}
