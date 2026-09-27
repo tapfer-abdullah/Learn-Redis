@@ -34,7 +34,7 @@ content-type: application/json
   "key": "banner-hash",
   "value": {
     "age": 30,
-    "title": "Welcome to Our Website",
+    "title": "Welcome",
     "message": "Enjoy your stay and explore our features!"
   }
 }
